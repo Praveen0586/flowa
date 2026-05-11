@@ -42,7 +42,7 @@ flutter run
 ### 4. Generating APK
 To generate the release APK for submission:
 ```bash
-flutter build apk --split-per-abi
+flutter build apk 
 ```
 The file will be located at `build/app/outputs/flutter-apk/app-release.apk`.
 
