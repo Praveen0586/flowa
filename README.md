@@ -1,17 +1,56 @@
-# flowa
+# Flowa - Flutter Task Manager
 
-A new Flutter project.
+Flowa is a premium, modern task management application built with Flutter and Firebase. It features a sleek dark-mode design, real-time Firestore synchronization, and daily motivational quotes via REST API.
 
-## Getting Started
+## 🚀 Features
 
-This project is a starting point for a Flutter application.
+- **Secure Authentication**: Firebase Email/Password Sign Up and Login.
+- **Task CRUD**: Create, Read, Update, and Delete tasks in real-time.
+- **Task Status**: Manage task progress (Pending, In-Progress, Completed).
+- **Daily Inspiration**: Random motivational quotes fetched from `quotable.io`.
+- **Premium UI**: Built with Google Fonts (Sora & DM Sans) and custom glassmorphism-inspired widgets.
 
-A few resources to get you started if this is your first Flutter project:
+## 🛠️ Setup Instructions
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+### 1. Prerequisites
+- **Flutter SDK**: v3.41.9
+- **Dart SDK**: v3.11.5
+- Firebase Account.
+- Android Studio / VS Code.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 2. Firebase Configuration
+1. Create a new Firebase Project at [Firebase Console](https://console.firebase.google.com/).
+2. Enable **Email/Password Authentication**.
+3. Create a **Firestore Database** in Test Mode.
+4. Add an Android App with package name `com.example.flowa`.
+5. Download `google-services.json` (Android) and `GoogleService-Info.plist` (iOS).
+6. Place `google-services.json` in `android/app/` and `GoogleService-Info.plist` in `ios/Runner/`.
+7. (Optional) Run `flutterfire configure` to update `firebase_options.dart`.
+
+### 3. Running the App
+```bash
+# Clone the repository
+git clone <your-repo-link>
+
+# Install dependencies
+flutter pub get
+
+# Run the app
+flutter run
+```
+
+### 4. Generating APK
+To generate the release APK for submission:
+```bash
+flutter build apk --split-per-abi
+```
+The file will be located at `build/app/outputs/flutter-apk/app-release.apk`.
+
+## 📂 Folder Structure
+- `lib/models/`: Data structures (TaskModel).
+- `lib/services/`: Logic for Firebase Auth, Firestore, and Quote API.
+- `lib/screens/`: UI Screens (Login, Signup, Home, Profile, etc.).
+- `lib/widgets/`: Reusable UI components.
+
+---
+**Developed for the Flutter Development Internship Assignment.**
