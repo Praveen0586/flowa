@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/auth_service.dart';
 import '../services/firestore_service.dart';
@@ -55,7 +56,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      user?.displayName ?? 'User',
+                      _capitalize(user?.displayName ?? 'User'),
                       style: GoogleFonts.sora(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -88,7 +89,7 @@ class ProfileScreen extends StatelessWidget {
                 title: 'About Developer',
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const DeveloperScreen()),
+                  CupertinoPageRoute(builder: (_) => const DeveloperScreen()),
                 ),
               ),
               _buildMenuItem(
@@ -155,5 +156,10 @@ class ProfileScreen extends StatelessWidget {
       ),
       trailing: const Icon(Icons.chevron_right, color: Colors.white24),
     );
+  }
+
+  String _capitalize(String text) {
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1);
   }
 }

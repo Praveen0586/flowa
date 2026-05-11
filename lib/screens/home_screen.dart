@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/auth_service.dart';
 import '../services/firestore_service.dart';
@@ -17,30 +18,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
-  final _authService = AuthService();
-  final _firestoreService = FirestoreService();
-  final _quoteService = QuoteService();
-  
+  final AuthService _authService = AuthService();
+  final FirestoreService _firestoreService = FirestoreService();
   late TabController _tabController;
-  String _quote = '';
-  String _author = '';
-  bool _quoteLoading = false;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _loadQuote();
   }
 
-  Future<void> _loadQuote() async {
-    setState(() => _quoteLoading = true);
-    final result = await _quoteService.fetchQuote();
-    setState(() {
-      _quote = result['content']!;
-      _author = result['author']!;
-      _quoteLoading = false;
-    });
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -65,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                         style: GoogleFonts.dmSans(fontSize: 14, color: Colors.white60),
                       ),
                       Text(
-                        user?.displayName ?? 'User',
+                        _capitalize(user?.displayName ?? 'User'),
                         style: GoogleFonts.sora(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -77,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   GestureDetector(
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                      CupertinoPageRoute(builder: (_) => const ProfileScreen()),
                     ),
                     child: CircleAvatar(
                       backgroundColor: const Color(0xFF1E293B),
@@ -93,20 +84,16 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: QuoteCard(
-                quote: _quote,
-                author: _author,
-                isLoading: _quoteLoading,
-                onRefresh: _loadQuote,
-              ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.0),
+              child: QuoteCard(),
             ),
             const SizedBox(height: 24),
             TabBar(
               controller: _tabController,
               indicatorColor: const Color(0xFF06B6D4),
               indicatorWeight: 3,
+              dividerColor: Colors.transparent, // Remove the thin white line
               labelColor: Colors.white,
               unselectedLabelColor: Colors.white30,
               labelStyle: GoogleFonts.dmSans(fontWeight: FontWeight.bold),
@@ -132,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const AddEditTaskScreen()),
+          CupertinoPageRoute(builder: (_) => const AddEditTaskScreen()),
         ),
         backgroundColor: const Color(0xFF06B6D4),
         child: const Icon(Icons.add, color: Colors.white),
@@ -184,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               task: task,
               onEdit: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => AddEditTaskScreen(task: task)),
+                CupertinoPageRoute(builder: (_) => AddEditTaskScreen(task: task)),
               ),
               onDelete: () => _firestoreService.deleteTask(user.uid, task.id),
               onToggleComplete: (val) => _firestoreService.markComplete(user.uid, task.id, val),
@@ -193,5 +180,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         );
       },
     );
+  }
+
+  String _capitalize(String text) {
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/auth_service.dart';
 import '../widgets/custom_button.dart';
@@ -101,17 +102,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   isPassword: true,
                   validator: (val) => val!.length < 6 ? 'Min 6 characters' : null,
                 ),
-                const SizedBox(height: 12),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Forgot Password?',
-                      style: GoogleFonts.dmSans(color: const Color(0xFF06B6D4)),
-                    ),
-                  ),
-                ),
                 const SizedBox(height: 32),
                 CustomButton(
                   label: 'Sign In',
@@ -129,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     GestureDetector(
                       onTap: () => Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const SignupScreen()),
+                        CupertinoPageRoute(builder: (_) => const SignupScreen()),
                       ),
                       child: Text(
                         'Sign Up',

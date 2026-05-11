@@ -1,23 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../services/quote_service.dart';
 
-class QuoteCard extends StatelessWidget {
-  final String quote;
-  final String author;
-  final bool isLoading;
-  final VoidCallback onRefresh;
+class QuoteCard extends StatefulWidget {
+  const QuoteCard({super.key});
 
-  const QuoteCard({
-    super.key,
-    required this.quote,
-    required this.author,
-    required this.isLoading,
-    required this.onRefresh,
-  });
+  @override
+  State<QuoteCard> createState() => _QuoteCardState();
+}
+
+class _QuoteCardState extends State<QuoteCard> {
+  final QuoteService _quoteService = QuoteService();
+  String _quote = 'The secret of getting ahead is getting started.';
+  String _author = 'Mark Twain';
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadQuote();
+  }
+
+  Future<void> _loadQuote() async {
+    if (!mounted) return;
+    setState(() => _isLoading = true);
+    
+    final result = await _quoteService.fetchQuote();
+    
+    if (!mounted) return;
+    setState(() {
+      _quote = result['content']!;
+      _author = result['author']!;
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: const BoxConstraints(minHeight: 120),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [Color(0xFF1e1b38), Color(0xFF1a2640)],
@@ -28,14 +49,11 @@ class QuoteCard extends StatelessWidget {
         border: Border.all(color: const Color(0xFF2a3a55)),
       ),
       padding: const EdgeInsets.all(16),
-      child: isLoading
+      child: _isLoading
           ? const Center(
-              child: SizedBox(
-                height: 40,
-                child: CircularProgressIndicator(
-                  color: Color(0xFF06B6D4),
-                  strokeWidth: 2,
-                ),
+              child: CircularProgressIndicator(
+                color: Color(0xFF06B6D4),
+                strokeWidth: 2,
               ),
             )
           : Column(
@@ -54,7 +72,7 @@ class QuoteCard extends StatelessWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: onRefresh,
+                      onTap: _loadQuote,
                       child: const Icon(
                         Icons.refresh_rounded,
                         size: 18,
@@ -65,7 +83,7 @@ class QuoteCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '"$quote"',
+                  '"$_quote"',
                   style: GoogleFonts.dmSans(
                     fontSize: 13,
                     color: const Color(0xFFF1F0FF),
@@ -75,7 +93,7 @@ class QuoteCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  '— $author',
+                  '— $_author',
                   style: GoogleFonts.dmSans(
                     fontSize: 11,
                     color: const Color(0xFF8B87B0),
