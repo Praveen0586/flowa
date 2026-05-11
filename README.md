@@ -30,7 +30,7 @@ Flowa is a premium, modern task management application built with Flutter and Fi
 ### 3. Running the App
 ```bash
 # Clone the repository
-git clone <your-repo-link>
+git clone https://github.com/Praveen0586/flowa.git
 
 # Install dependencies
 flutter pub get
